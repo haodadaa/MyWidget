@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BreatheAnimator</string>
+    <string name="start">开始</string>
+    <string name="end">暂停</string>
+</resources>
