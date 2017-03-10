@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Behavior</string>
+
+    <string name="behavior_content">com.hao.behavior.behavior.ContentBehavior</string>
+    <string name="behavior_tab">com.hao.behavior.behavior.TabBehavior</string>
+    <string name="behavior_title">com.hao.behavior.behavior.TitleBehavior</string>
+    <string name="behavior_header">com.hao.behavior.behavior.HeadBehavior</string>
+</resources>
