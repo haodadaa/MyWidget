@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         transparentAnimator = ObjectAnimator.ofFloat(tvTransparent, "alpha", 1f, 0f);
         transparentAnimator.setDuration(4000);
         transparentAnimator.setInterpolator(new BreatheInterpolator());//使用自定义的插值器
-        transparentAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        // transparentAnimator.setRepeatCount(ValueAnimator.INFINITE);
         transparentAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {

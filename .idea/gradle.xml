@@ -11,11 +11,10 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/behavior" />
-            <option value="$PROJECT_DIR$/behavior2" />
             <option value="$PROJECT_DIR$/breatheanimator" />
             <option value="$PROJECT_DIR$/cardswipe" />
-            <option value="$PROJECT_DIR$/constrainlayout" />
             <option value="$PROJECT_DIR$/floatingrecyclerview" />
+            <option value="$PROJECT_DIR$/particle" />
             <option value="$PROJECT_DIR$/radiobuttonrecyclerview" />
             <option value="$PROJECT_DIR$/shadowimageview" />
             <option value="$PROJECT_DIR$/viewpageranimator" />

@@ -1,1 +1,1 @@
-include ':app', ':breatheanimator', ':behavior', ':cardswipe', ':shadowimageview', ':viewpageranimator', ':radiobuttonrecyclerview', ':behavior2', ':constrainlayout', ':floatingrecyclerview'
+include ':app', ':breatheanimator', ':behavior', ':cardswipe', ':shadowimageview', ':viewpageranimator', ':radiobuttonrecyclerview', ':floatingrecyclerview', ':particle'
