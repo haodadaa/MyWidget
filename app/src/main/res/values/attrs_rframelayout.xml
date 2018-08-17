@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="RoundFrameLayout">
+    <declare-styleable name="RFrameLayout">
         <attr name="roundAsCircle" format="boolean"/>
         <attr name="roundTopLeft" format="boolean"/>
         <attr name="roundTopRight" format="boolean"/>

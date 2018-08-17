@@ -3,24 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyWidget.iml" filepath="$PROJECT_DIR$/MyWidget.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MyWidget.iml" filepath="$PROJECT_DIR$/MyWidget.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/behavior/behavior.iml" filepath="$PROJECT_DIR$/behavior/behavior.iml" />
-      <module fileurl="file://$PROJECT_DIR$/behavior/behavior.iml" filepath="$PROJECT_DIR$/behavior/behavior.iml" />
-      <module fileurl="file://$PROJECT_DIR$/breatheanimator/breatheanimator.iml" filepath="$PROJECT_DIR$/breatheanimator/breatheanimator.iml" />
       <module fileurl="file://$PROJECT_DIR$/breatheanimator/breatheanimator.iml" filepath="$PROJECT_DIR$/breatheanimator/breatheanimator.iml" />
       <module fileurl="file://$PROJECT_DIR$/cardswipe/cardswipe.iml" filepath="$PROJECT_DIR$/cardswipe/cardswipe.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cardswipe/cardswipe.iml" filepath="$PROJECT_DIR$/cardswipe/cardswipe.iml" />
-      <module fileurl="file://$PROJECT_DIR$/floatingrecyclerview/floatingrecyclerview.iml" filepath="$PROJECT_DIR$/floatingrecyclerview/floatingrecyclerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/floatingrecyclerview/floatingrecyclerview.iml" filepath="$PROJECT_DIR$/floatingrecyclerview/floatingrecyclerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/particle/particle.iml" filepath="$PROJECT_DIR$/particle/particle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/particle/particle.iml" filepath="$PROJECT_DIR$/particle/particle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/radiobuttonrecyclerview/radiobuttonrecyclerview.iml" filepath="$PROJECT_DIR$/radiobuttonrecyclerview/radiobuttonrecyclerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/radiobuttonrecyclerview/radiobuttonrecyclerview.iml" filepath="$PROJECT_DIR$/radiobuttonrecyclerview/radiobuttonrecyclerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/shadowimageview/shadowimageview.iml" filepath="$PROJECT_DIR$/shadowimageview/shadowimageview.iml" />
-      <module fileurl="file://$PROJECT_DIR$/shadowimageview/shadowimageview.iml" filepath="$PROJECT_DIR$/shadowimageview/shadowimageview.iml" />
-      <module fileurl="file://$PROJECT_DIR$/viewpageranimator/viewpageranimator.iml" filepath="$PROJECT_DIR$/viewpageranimator/viewpageranimator.iml" />
       <module fileurl="file://$PROJECT_DIR$/viewpageranimator/viewpageranimator.iml" filepath="$PROJECT_DIR$/viewpageranimator/viewpageranimator.iml" />
     </modules>
   </component>

@@ -3,18 +3,24 @@ package com.hao.mywidget.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RadialGradient;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.hao.mywidget.R;
 
-public class RoundFrameLayout extends FrameLayout {
+public class RFrameLayout extends FrameLayout {
+
+    private static final boolean DEBUG = false;
 
     // Layout的宽高
     private int mViewWidth = 1;
@@ -52,30 +58,51 @@ public class RoundFrameLayout extends FrameLayout {
     // 用于计算圆角区域
     private Path mPath;
 
+    private Paint mDebugPaint;
 
-    public RoundFrameLayout(Context context) {
+    private Paint mGradientPaint;
+    private LinearGradient mLeftGradient;
+    private LinearGradient mTopGradient;
+    private LinearGradient mRightGradient;
+    private LinearGradient mBottomGradient;
+    private RadialGradient mTLGradient;
+    private RadialGradient mTRGradient;
+    private RadialGradient mBLGradient;
+    private RadialGradient mBRGradient;
+    private float mInnerLeft;
+    private float mInnerTop;
+    private float mInnerRight;
+    private float mInnerBottom;
+    private float mLeft;
+    private float mTop;
+    private float mRight;
+    private float mBottom;
+
+    private boolean mIsSoft = true;
+
+    public RFrameLayout(Context context) {
         this(context, null);
     }
 
-    public RoundFrameLayout(Context context, AttributeSet attrs) {
+    public RFrameLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RoundFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RoundFrameLayout);
-        mRoundAsCircle = array.getBoolean(R.styleable.RoundFrameLayout_roundAsCircle, false);
-        mRoundTopLeft = array.getBoolean(R.styleable.RoundFrameLayout_roundTopLeft, true);
-        mRoundTopRight = array.getBoolean(R.styleable.RoundFrameLayout_roundTopRight, true);
-        mRoundBottomLeft = array.getBoolean(R.styleable.RoundFrameLayout_roundBottomLeft, true);
-        mRoundBottomRight = array.getBoolean(R.styleable.RoundFrameLayout_roundBottomRight, true);
-        mRoundCornerRadius = array.getDimensionPixelSize(R.styleable.RoundFrameLayout_roundCornerRadius, 0);
-        mShadowRadius = array.getDimensionPixelSize(R.styleable.RoundFrameLayout_shadowRadius, 0);
-        mShadowDx = array.getDimensionPixelSize(R.styleable.RoundFrameLayout_shadowDx, 0);
-        mShadowDy = array.getDimensionPixelSize(R.styleable.RoundFrameLayout_shadowDy, 0);
-        mShadowColor = array.getColor(R.styleable.RoundFrameLayout_shadowColor, 0x00000000);
-        mPaintColor = array.getColor(R.styleable.RoundFrameLayout_paintColor, 0xffffffff);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RFrameLayout);
+        mRoundAsCircle = array.getBoolean(R.styleable.RFrameLayout_roundAsCircle, false);
+        mRoundTopLeft = array.getBoolean(R.styleable.RFrameLayout_roundTopLeft, true);
+        mRoundTopRight = array.getBoolean(R.styleable.RFrameLayout_roundTopRight, true);
+        mRoundBottomLeft = array.getBoolean(R.styleable.RFrameLayout_roundBottomLeft, true);
+        mRoundBottomRight = array.getBoolean(R.styleable.RFrameLayout_roundBottomRight, true);
+        mRoundCornerRadius = array.getDimensionPixelSize(R.styleable.RFrameLayout_roundCornerRadius, 0);
+        mShadowRadius = array.getDimensionPixelSize(R.styleable.RFrameLayout_shadowRadius, 0);
+        mShadowDx = array.getDimensionPixelSize(R.styleable.RFrameLayout_shadowDx, 0);
+        mShadowDy = array.getDimensionPixelSize(R.styleable.RFrameLayout_shadowDy, 0);
+        mShadowColor = array.getColor(R.styleable.RFrameLayout_shadowColor, 0x00000000);
+        mPaintColor = array.getColor(R.styleable.RFrameLayout_paintColor, 0xffffffff);
         array.recycle();
 
         init();
@@ -84,8 +111,10 @@ public class RoundFrameLayout extends FrameLayout {
     private void init() {
         // 如果ViewGroup需要重写onDraw方法，需要清除此标志位
         setWillNotDraw(false);
-        // 使用setShadowLayer生成阴影效果，需要关闭硬件加速
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
+        // 使用setShadowLayer生成阴影效果，
+        if (mIsSoft) {
+            setLayerType(LAYER_TYPE_SOFTWARE, null);
+        }
 
         mRoundPaint = new Paint();
         mRoundPaint.setColor(mPaintColor);
@@ -102,6 +131,15 @@ public class RoundFrameLayout extends FrameLayout {
 
         mImageRect = new RectF();
         mPath = new Path();
+
+        if (DEBUG) {
+            mDebugPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mDebugPaint.setColor(Color.GREEN);
+            mDebugPaint.setStrokeWidth(2);
+            mDebugPaint.setStyle(Paint.Style.STROKE);
+        }
+
+        mGradientPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
     public boolean isRoundAsCircle() {
@@ -214,6 +252,42 @@ public class RoundFrameLayout extends FrameLayout {
                 mShadowRadius - mShadowDy,
                 mViewWidth - mShadowRadius - mShadowDx,
                 mViewHeight - mShadowRadius - mShadowDy);
+
+        mLeft = 0;
+        mTop = 0;
+        mRight = mViewWidth;
+        mBottom = mViewHeight;
+        mInnerLeft = mLeft + mShadowRadius + mRoundCornerRadius;
+        mInnerTop = mTop + mShadowRadius + mRoundCornerRadius;
+        mInnerRight = mRight - mShadowRadius - mRoundCornerRadius;
+        mInnerBottom = mBottom - mShadowRadius - mRoundCornerRadius;
+
+        mLeftGradient = new LinearGradient(0, 0,
+                mInnerLeft, 0,
+                0x00000000, mShadowColor, Shader.TileMode.CLAMP);
+        mTopGradient = new LinearGradient(0, 0,
+                0, mInnerTop,
+                0x00000000, mShadowColor, Shader.TileMode.CLAMP);
+        mRightGradient = new LinearGradient(mViewWidth, 0,
+                mInnerRight, 0,
+                0x00000000, mShadowColor, Shader.TileMode.CLAMP);
+        mBottomGradient = new LinearGradient(0, mViewHeight,
+                0, mInnerBottom,
+                0x00000000, mShadowColor, Shader.TileMode.CLAMP);
+
+        mTLGradient = new RadialGradient(mInnerLeft, mInnerTop,
+                mShadowRadius + mRoundCornerRadius,
+                mShadowColor, 0x00000000, Shader.TileMode.CLAMP);
+        mTRGradient = new RadialGradient(mInnerRight, mInnerTop,
+                mShadowRadius + mRoundCornerRadius,
+                mShadowColor, 0x00000000, Shader.TileMode.CLAMP);
+        mBLGradient = new RadialGradient(mInnerLeft, mInnerBottom,
+                mShadowRadius + mRoundCornerRadius,
+                mShadowColor, 0x00000000, Shader.TileMode.CLAMP);
+        mBRGradient = new RadialGradient(mInnerRight, mInnerBottom,
+                mShadowRadius + mRoundCornerRadius,
+                mShadowColor, 0x00000000, Shader.TileMode.CLAMP);
+
     }
 
     // 根据标志位设置哪些角为圆角
@@ -280,6 +354,15 @@ public class RoundFrameLayout extends FrameLayout {
         mViewWidth = MeasureSpec.getSize(widthMeasureSpec);
         mViewHeight = MeasureSpec.getSize(heightMeasureSpec);
         updateImageRect();
+
+        if (DEBUG) {
+            mPath.moveTo(0, 0);
+            mPath.lineTo(mViewWidth, 0);
+            mPath.lineTo(mViewWidth, mViewHeight);
+            mPath.lineTo(0, mViewHeight);
+            mPath.lineTo(0, 0);
+        }
+
     }
 
     @Override
@@ -334,10 +417,96 @@ public class RoundFrameLayout extends FrameLayout {
             canvas.drawCircle(mViewWidth / 2 - mShadowDx, mViewHeight / 2 - mShadowDy, radius, mShadowPaint);
 
         } else if (mShadowRadius > 0) {
-            mPath.reset();
-            setRoundCorners();
-            mPath.addRoundRect(mImageRect, mRoundCorners, Path.Direction.CW);
-            canvas.drawPath(mPath, mShadowPaint);
+            if (mIsSoft) {
+                mPath.reset();
+                setRoundCorners();
+                mPath.addRoundRect(mImageRect, mRoundCorners, Path.Direction.CW);
+                canvas.drawPath(mPath, mShadowPaint);
+            } else {
+                mGradientPaint.setShader(mLeftGradient);
+                canvas.drawRect(0,
+                        mInnerTop,
+                        mInnerRight,
+                        mInnerBottom,
+                        mGradientPaint);
+
+                mGradientPaint.setShader(mTopGradient);
+                canvas.drawRect(mInnerLeft,
+                        0,
+                        mInnerRight,
+                        mInnerBottom,
+                        mGradientPaint);
+
+                mGradientPaint.setShader(mRightGradient);
+                canvas.drawRect(mInnerLeft,
+                        mInnerTop,
+                        mViewWidth,
+                        mInnerBottom,
+                        mGradientPaint);
+
+                mGradientPaint.setShader(mBottomGradient);
+                canvas.drawRect(mInnerLeft,
+                        mInnerTop,
+                        mInnerRight,
+                        mViewHeight,
+                        mGradientPaint);
+
+                mGradientPaint.setShader(mTLGradient);
+                canvas.drawRect(0,
+                        0,
+                        mInnerLeft,
+                        mInnerTop,
+                        mGradientPaint);
+
+                mGradientPaint.setShader(mTRGradient);
+                canvas.drawRect(mInnerRight,
+                        0,
+                        mViewWidth,
+                        mInnerTop,
+                        mGradientPaint);
+
+                mGradientPaint.setShader(mBLGradient);
+                canvas.drawRect(0,
+                        mInnerBottom,
+                        mInnerLeft,
+                        mViewHeight,
+                        mGradientPaint);
+
+                mGradientPaint.setShader(mBRGradient);
+                canvas.drawRect(mInnerRight,
+                        mInnerBottom,
+                        mViewWidth,
+                        mViewHeight,
+                        mGradientPaint);
+
+                mPath.reset();
+                mPath.setFillType(Path.FillType.INVERSE_EVEN_ODD);
+                // 添加一个矩形路径
+                mPath.addRect(0, 0, mViewWidth, mViewHeight, Path.Direction.CW);
+                // 添加一个圆角矩形路径，因为FillType是EVEN_ODD，相当于在上面矩形中“裁剪”掉该圆角矩形的区域
+                if (mRoundAsCircle) {
+                    float radius;
+                    if (mViewWidth > mViewHeight) {
+                        radius = mViewHeight / 2 - mShadowRadius;
+                    } else {
+                        radius = mViewWidth / 2 - mShadowRadius;
+                    }
+                    mPath.addCircle(mViewWidth / 2 - mShadowDx, mViewHeight / 2 - mShadowDy, radius, Path.Direction.CW);
+
+                } else if (mRoundCornerRadius > 0) {
+                    setRoundCorners();
+                    mPath.addRoundRect(mImageRect, mRoundCorners, Path.Direction.CW);
+                }
+                // “裁剪”掉路径内的画面，形成圆角效果
+                canvas.drawPath(mPath, mRoundPaint);
+            }
+        }
+
+        if (DEBUG) {
+            canvas.drawRect(0, 0, 1, mViewHeight, mDebugPaint);
+            canvas.drawRect(0, 0, mViewWidth, 1, mDebugPaint);
+            canvas.drawRect(mViewWidth - 1, 0, mViewWidth, mViewHeight, mDebugPaint);
+            canvas.drawRect(0, mViewHeight - 1, mViewWidth, mViewHeight, mDebugPaint);
         }
     }
 
